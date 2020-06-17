@@ -3,6 +3,9 @@ import pandas as pandas
 from sklearn import metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.tree import export_graphviz
+from subprocess import call
+from IPython.display import Image
 
 
 # Classification Model Function
@@ -12,6 +15,7 @@ def classification_model(model, data, predictors, outcome):
     accuracy = metrics.accuracy_score(predictions, data[outcome])
     print("Training accuracy : %s" % "{0: .3%}".format(accuracy))
     accuracy = []
+    # for i in range(0,50):
     train = data.loc[data.season != '2015/2016']
     test = data.loc[data.season == '2015/2016']
     train_predictors = train[predictors]
@@ -19,7 +23,21 @@ def classification_model(model, data, predictors, outcome):
     model.fit(train_predictors, train_target)
     accuracy.append(model.score(test[predictors], test[outcome]))
     print("Cross-Validation-Score : %s" % "{0: .3%}".format(numpy.mean(accuracy)))
-    model.fit(data[predictors], data[outcome])
+    # model.fit(data[predictors], data[outcome])
+    estimator = model.estimators_[5]
+    # print(data[outcome])
+    # Export as dot file
+    export_graphviz(estimator, out_file='tree.dot',
+                    feature_names=predictors,
+                    class_names=outcome,
+                    rounded=True, proportion=False,
+                    precision=2, filled=True)
+
+    # Convert to png using system command (requires Graphviz)
+    call(['dot', '-Tpng', 'tree.dot', '-o', 'tree.png', '-Gdpi=600'])
+    # os.system('dot -Tpng tree.dot -o tree.png')
+    # Display in jupyter notebook
+    Image(filename='tree.png')
 
 
 # Assign Winner
@@ -72,5 +90,6 @@ _data['result'] = _data['result'].apply(is_winner)
 
 # RF Classifier
 outcome_var = 'result'
-_model = RandomForestClassifier(n_estimators=25, min_samples_split=25, max_depth=2, max_features='auto')
+# max_depth=20,
+_model = RandomForestClassifier(n_estimators=100, min_samples_split=100 , max_depth=2, max_features='auto')
 classification_model(_model, _data, test_mod, outcome_var)
