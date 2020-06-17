@@ -1,9 +1,9 @@
 import pandas as pandas
 
 try:
-    _data = pandas.read_csv('datasets/Match.csv')
+    data = pandas.read_csv('datasets/Match.csv')
 except FileNotFoundError:
-    _data = None
+    data = None
 
 # All Bet Data columns
 bet_columns = ['B365H', 'B365D', 'B365A', 'BWH', 'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH',
@@ -18,7 +18,7 @@ bet_columns_A = ['B365A', 'BWA', 'IWA',  'LBA', 'WHA', 'SJA', 'VCA', 'GBA', 'BSA
 
 # Data Preparation
 cleaned_data_frame = []
-for index, row in _data.iterrows():
+for index, row in data.iterrows():
     if row[bet_columns].isna().sum() < len(bet_columns):
         cleaned_data_frame.append(index)
         if row[bet_columns].isna().sum() > 0:
@@ -26,15 +26,15 @@ for index, row in _data.iterrows():
             avg_D = row[bet_columns_D].sum()/row[bet_columns_D].isna().sum()
             avg_H = row[bet_columns_H].sum()/row[bet_columns_H].isna().sum()
             for column in bet_columns_A:
-                if _data[index:index+1][column].isna().sum() != 0:
-                    _data[index:index+1][column].fillna(avg_A, inplace=True)
+                if data[index:index + 1][column].isna().sum() != 0:
+                    data[index:index + 1][column].fillna(avg_A, inplace=True)
             for column in bet_columns_D:
-                if _data[index:index + 1][column].isna().sum() != 0:
-                    _data[index:index+1][column].fillna(avg_D, inplace=True)
+                if data[index:index + 1][column].isna().sum() != 0:
+                    data[index:index + 1][column].fillna(avg_D, inplace=True)
             for column in bet_columns_H:
-                if _data[index:index+1][column].isna().sum() != 0:
-                    _data[index:index + 1][column].fillna(avg_H, inplace=True)
-_data = _data.loc[cleaned_data_frame]
-print(_data)
+                if data[index:index + 1][column].isna().sum() != 0:
+                    data[index:index + 1][column].fillna(avg_H, inplace=True)
+data = data.loc[cleaned_data_frame]
+print(data)
 # Save new data csv
-_data.to_csv('datasets/Match_cleaned.csv')
+data.to_csv('datasets/Match_cleaned.csv')
