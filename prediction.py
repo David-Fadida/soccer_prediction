@@ -47,6 +47,7 @@ def fill_null_bet(data, column_name):
 # Import Data - Match table
 try:
     _data = pandas.read_csv('datasets/Match.csv')
+    # _data = pandas.read_csv('Datasets/output_cleaned_data.csv')
 except FileNotFoundError:
     _data = None
     var_mod = None
@@ -58,14 +59,15 @@ else:
                'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10', 'home_player_11', 'away_player_1',
                'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 'away_player_6', 'away_player_7',
                'away_player_8', 'away_player_9', 'away_player_10', 'away_player_11', 'B365H', 'B365D', 'B365A', 'BWH',
-               'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'WHH', 'WHD', 'WHA', 'SJH', 'SJD', 'SJA', 'VCH',
-               'VCD', 'VCA', 'GBH', 'GBD', 'GBA', 'BSH', 'BSD', 'BSA']
-    test_mod = ['home_team_api_id', 'away_team_api_id', 'B365H', 'B365D', 'B365A']
+               'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'PSH', 'PSD', 'PSA', 'WHH', 'WHD', 'WHA', 'SJH',
+               'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD', 'GBA', 'BSH', 'BSD', 'BSA']
+    test_mod = ['home_team_api_id', 'away_team_api_id', 'B365H', 'B365D', 'B365A', 'BWH', 'BWD', 'BWA', 'IWH', 'IWD',
+                'IWA', 'LBH', 'LBD', 'LBA', 'WHH', 'WHD', 'WHA', 'SJH', 'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD',
+                'GBA', 'BSH', 'BSD', 'BSA', 'PSH', 'PSD', 'PSA']
     encoder = LabelEncoder()
 
-# Data Preparation
-for column in test_mod:
-    fill_null_bet(_data, column)
+# for column in test_mod:
+#     fill_null_bet(_data, column)
 
 # for i in var_mod:
 #     _data[i] = encoder.fit_transform(_data[i])
@@ -76,5 +78,5 @@ _data['result'] = _data['result'].apply(is_winner)
 
 # RF Classifier
 outcome_var = 'result'
-_model = RandomForestClassifier(n_estimators=100)
+_model = RandomForestClassifier(n_estimators=25, min_samples_split=25, max_depth=2, max_features='auto')
 classification_model(_model, _data, test_mod, outcome_var)
