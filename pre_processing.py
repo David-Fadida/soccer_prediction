@@ -22,9 +22,9 @@ for index, row in data.iterrows():
     if row[bet_columns].isna().sum() < len(bet_columns):
         cleaned_data_frame.append(index)
         if row[bet_columns].isna().sum() > 0:
-            avg_A = row[bet_columns_A].sum()/row[bet_columns_A].isna().sum()
-            avg_D = row[bet_columns_D].sum()/row[bet_columns_D].isna().sum()
-            avg_H = row[bet_columns_H].sum()/row[bet_columns_H].isna().sum()
+            avg_A = row[bet_columns_A].sum()/row[bet_columns_A].notna().sum()
+            avg_D = row[bet_columns_D].sum()/row[bet_columns_D].notna().sum()
+            avg_H = row[bet_columns_H].sum()/row[bet_columns_H].notna().sum()
             for column in bet_columns_A:
                 if data[index:index + 1][column].isna().sum() != 0:
                     data[index:index + 1][column].fillna(avg_A, inplace=True)
