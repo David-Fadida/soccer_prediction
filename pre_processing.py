@@ -16,6 +16,8 @@ bet_columns_D = ['B365D', 'BWD', 'IWD',  'LBD', 'WHD', 'SJD', 'VCD', 'GBD', 'BSD
 # Away win chances
 bet_columns_A = ['B365A', 'BWA', 'IWA',  'LBA', 'WHA', 'SJA', 'VCA', 'GBA', 'BSA', 'PSA']
 
+# Ignore Some Errors
+pandas.set_option('mode.chained_assignment', None)
 # Data Preparation
 cleaned_data_frame = []
 for index, row in data.iterrows():

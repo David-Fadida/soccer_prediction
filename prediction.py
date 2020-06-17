@@ -1,6 +1,5 @@
 import numpy as numpy
 import pandas as pandas
-
 from sklearn import metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
@@ -14,8 +13,6 @@ def classification_model(model, data, predictors, outcome):
     print("Training accuracy : %s" % "{0: .3%}".format(accuracy))
     accuracy = []
     train = data.loc[data.season != '2015/2016']
-    # train = train[0]
-    print(train)
     test = data.loc[data.season == '2015/2016']
     train_predictors = train[predictors]
     train_target = train[outcome]
@@ -35,7 +32,6 @@ def assign_winner(game_result):
         return 0
 
 
-# LAMBDA Assign Winner
 is_winner = lambda x: assign_winner(x)
 
 
@@ -46,25 +42,25 @@ def fill_null_bet(data, column_name):
 
 # Import Data - Match table
 try:
-    _data = pandas.read_csv('datasets/Match.csv')
-    # _data = pandas.read_csv('Datasets/output_cleaned_data.csv')
+    # _data = pandas.read_csv('datasets/Match.csv')
+    _data = pandas.read_csv('datasets/Match_cleaned.csv')
 except FileNotFoundError:
     _data = None
-    var_mod = None
-    test_mod = None
-    encoder = None
-else:
-    var_mod = ['id', 'league_id', 'season', 'home_team_api_id', 'away_team_api_id', 'home_team_goal', 'away_team_goal',
-               'home_player_1', 'home_player_2', 'home_player_3', 'home_player_4', 'home_player_5', 'home_player_6',
-               'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10', 'home_player_11', 'away_player_1',
-               'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 'away_player_6', 'away_player_7',
-               'away_player_8', 'away_player_9', 'away_player_10', 'away_player_11', 'B365H', 'B365D', 'B365A', 'BWH',
-               'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'PSH', 'PSD', 'PSA', 'WHH', 'WHD', 'WHA', 'SJH',
-               'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD', 'GBA', 'BSH', 'BSD', 'BSA']
-    test_mod = ['home_team_api_id', 'away_team_api_id', 'B365H', 'B365D', 'B365A', 'BWH', 'BWD', 'BWA', 'IWH', 'IWD',
-                'IWA', 'LBH', 'LBD', 'LBA', 'WHH', 'WHD', 'WHA', 'SJH', 'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD',
-                'GBA', 'BSH', 'BSD', 'BSA', 'PSH', 'PSD', 'PSA']
-    encoder = LabelEncoder()
+    raise FileNotFoundError
+
+# Relevant Columns
+var_mod = ['id', 'league_id', 'season', 'home_team_api_id', 'away_team_api_id', 'home_team_goal', 'away_team_goal',
+           'home_player_1', 'home_player_2', 'home_player_3', 'home_player_4', 'home_player_5',    'home_player_6',
+           'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10', 'home_player_11',  'away_player_1',
+           'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 'away_player_6',    'away_player_7',
+           'away_player_8', 'away_player_9', 'away_player_10', 'away_player_11', 'B365H', 'B365D', 'B365A',  'BWH',
+           'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'PSH', 'PSD', 'PSA', 'WHH', 'WHD', 'WHA', 'SJH',
+           'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD', 'GBA', 'BSH', 'BSD', 'BSA']
+# Test Columns
+test_mod = ['home_team_api_id', 'away_team_api_id', 'B365H', 'B365D', 'B365A', 'BWH',  'BWD',  'BWA',  'IWH', 'IWD',
+            'IWA', 'LBH', 'LBD', 'LBA', 'WHH', 'WHD', 'WHA', 'SJH', 'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD',
+            'GBA', 'BSH', 'BSD', 'BSA', 'PSH', 'PSD', 'PSA']
+encoder = LabelEncoder()
 
 # for column in test_mod:
 #     fill_null_bet(_data, column)
@@ -72,8 +68,7 @@ else:
 # for i in var_mod:
 #     _data[i] = encoder.fit_transform(_data[i])
 
-new_column = _data['home_team_goal'] - _data['away_team_goal']
-_data = _data.assign(result=new_column)
+_data['result'] = _data['home_team_goal'] - _data['away_team_goal']
 _data['result'] = _data['result'].apply(is_winner)
 
 # RF Classifier
