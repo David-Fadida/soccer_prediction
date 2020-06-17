@@ -42,8 +42,7 @@ def fill_null_bet(data, column_name):
 
 # Import Data - Match table
 try:
-    # _data = pandas.read_csv('datasets/Match.csv')
-    _data = pandas.read_csv('datasets/Match_cleaned.csv')
+    _data = pandas.read_csv('datasets/Match_Cleaned.csv')
 except FileNotFoundError:
     _data = None
     raise FileNotFoundError
@@ -64,7 +63,7 @@ encoder = LabelEncoder()
 
 # for column in test_mod:
 #     fill_null_bet(_data, column)
-
+#
 # for i in var_mod:
 #     _data[i] = encoder.fit_transform(_data[i])
 

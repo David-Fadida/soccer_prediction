@@ -39,4 +39,4 @@ for index, row in data.iterrows():
 data = data.loc[cleaned_data_frame]
 print(data)
 # Save new data csv
-data.to_csv('datasets/Match_cleaned.csv')
+data.to_csv('datasets/Match_Cleaned.csv')
