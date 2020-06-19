@@ -5,7 +5,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
 
 
-# Classification Model Function
+# Classification model function
 def classification_model(model, data, predictors, outcome):
     model.fit(data[predictors], data[outcome])
     predictions = model.predict(data[predictors])
@@ -22,7 +22,7 @@ def classification_model(model, data, predictors, outcome):
     model.fit(data[predictors], data[outcome])
 
 
-# Assign Winner
+# Assign winner
 def assign_winner(game_result):
     if game_result < 0:
         return -1
@@ -32,22 +32,23 @@ def assign_winner(game_result):
         return 0
 
 
+# Is winner
 is_winner = lambda x: assign_winner(x)
 
 
-# Fill NaN Bets
+# Fill NaN bets
 def fill_null_bet(data, column_name):
     data[column_name].fillna(data[column_name].mean(), inplace=True)
 
 
-# Import Data - Match table
+# Import DATA
 try:
     _data = pandas.read_csv('datasets/Match_Cleaned.csv')
 except FileNotFoundError:
     _data = None
     raise FileNotFoundError
 
-# Relevant Columns
+# Relevant columns
 var_mod = ['id', 'league_id', 'season', 'home_team_api_id', 'away_team_api_id', 'home_team_goal', 'away_team_goal',
            'home_player_1', 'home_player_2', 'home_player_3', 'home_player_4', 'home_player_5',    'home_player_6',
            'home_player_7', 'home_player_8', 'home_player_9', 'home_player_10', 'home_player_11',  'away_player_1',
@@ -55,18 +56,11 @@ var_mod = ['id', 'league_id', 'season', 'home_team_api_id', 'away_team_api_id', 
            'away_player_8', 'away_player_9', 'away_player_10', 'away_player_11', 'B365H', 'B365D', 'B365A',  'BWH',
            'BWD', 'BWA', 'IWH', 'IWD', 'IWA', 'LBH', 'LBD', 'LBA', 'PSH', 'PSD', 'PSA', 'WHH', 'WHD', 'WHA', 'SJH',
            'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD', 'GBA', 'BSH', 'BSD', 'BSA']
-# Test Columns
+# Test columns
 test_mod = ['home_team_api_id', 'away_team_api_id', 'B365H', 'B365D', 'B365A', 'BWH',  'BWD',  'BWA',  'IWH', 'IWD',
             'IWA', 'LBH', 'LBD', 'LBA', 'WHH', 'WHD', 'WHA', 'SJH', 'SJD', 'SJA', 'VCH', 'VCD', 'VCA', 'GBH', 'GBD',
             'GBA', 'BSH', 'BSD', 'BSA', 'PSH', 'PSD', 'PSA']
 encoder = LabelEncoder()
-
-# for column in test_mod:
-#     fill_null_bet(_data, column)
-#
-# for i in var_mod:
-#     _data[i] = encoder.fit_transform(_data[i])
-
 _data['result'] = _data['home_team_goal'] - _data['away_team_goal']
 _data['result'] = _data['result'].apply(is_winner)
 
