@@ -50,8 +50,10 @@ player_fields = ['home_player_1', 'home_player_2', 'home_player_3', 'home_player
                  'away_player_2', 'away_player_3', 'away_player_4', 'away_player_5', 'away_player_6', 'away_player_7',
                  'away_player_8', 'away_player_9', 'away_player_10', 'away_player_11']
 # Matches selected data
-matches_data = matches_data[['country_id', 'league_id', 'season', 'stage', 'match_api_id', 'home_team_api_id',
-                             'away_team_api_id', 'home_team_goal', 'away_team_goal'] + player_data]
+selected_data = ['country_id', 'league_id', 'season', 'stage', 'match_api_id', 'home_team_api_id', 'away_team_api_id',
+                 'home_team_goal', 'away_team_goal']
+selected_data = selected_data + player_fields
+matches_data = matches_data[selected_data]
 matches_data['season'] = matches_data['season'].apply(lambda x: fix_season(x))
 seasons = player_data['date'].apply(lambda x: get_season(x))
 player_df = pandas.DataFrame(data=player_data[['player_api_id', 'overall_rating']])
