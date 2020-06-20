@@ -18,7 +18,7 @@ def classification_model(model, data, predictors, outcome):
     for i in range(0, 10):
         model.fit(train_predictors, train_target)
         accuracy.append(model.score(test[predictors], test[outcome]))
-    print("Cross-Validation-Score : %s" % "{0: .3%}".format(numpy.mean(accuracy)))
+    print("Testing accuracy : %s" % "{0: .3%}".format(numpy.mean(accuracy)))
     model.fit(data[predictors], data[outcome])
 
 
