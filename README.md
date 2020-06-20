@@ -1,5 +1,4 @@
-# soccer_prediction
+# Soccer Game Result Prediction
 
-conda install scikit-learn
-conda install pandas
-conda install numpy
+based on Random Forest Algorithm.
+data from https://www.kaggle.com/hugomathien/soccer
